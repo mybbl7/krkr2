@@ -101,17 +101,56 @@ bool TVPAppDelegate::applicationDidFinishLaunching() {
     director->runWithScene(scene);
 
     scene->scheduleOnce(
-        [](float dt) {
-            TVPMainScene::GetInstance()->unschedule("launch");
-            TVPGlobalPreferenceForm::Initialize();
-            if(!TVPCheckStartupArg()) {
-                TVPMainScene::GetInstance()->pushUIForm(
-                    TVPMainFileSelectorForm::create());
+    [](float dt) {
+        spdlog::debug("Launch sequence started");
+
+        TVPGlobalPreferenceForm::Initialize();
+
+        const char *envPath = std::getenv("krkrdatapath");
+        if(envPath && *envPath) {
+            std::string path(envPath);
+            auto fu = cocos2d::FileUtils::getInstance();
+            spdlog::debug("krkrdatapath = {}", path);
+
+            // derive base directory
+            auto pos = path.find_last_of("/\\");
+            std::string baseDir =
+                (pos != std::string::npos) ? path.substr(0, pos) : ".";
+            std::string saveDataDir = baseDir + "/savedata";
+
+            // create savedata directory if needed
+
+            if(!fu->isDirectoryExist(saveDataDir)) {
+                if(!fu->createDirectory(saveDataDir)) {
+                    spdlog::error("Failed to create savedata directory at {}",
+                                  saveDataDir);
+                }
             }
-        },
+
+
+            // if path is valid, launch directly
+            if(fu->isFileExist(path) || fu->isDirectoryExist(path)) {
+                spdlog::debug("Launching from {}", path);
+                TVPMainScene::GetInstance()->startupFrom(path);
+                return; // skip menu
+            }
+        }
+
+
+
+
+        }
+    
+        if (!TVPCheckStartupArg()) {
+        spdlog::debug("No startup args, showing file selector");
+        TVPMainScene::GetInstance()->pushUIForm(
+            TVPMainFileSelectorForm::create());
+        }
+},
         0, "launch");
 
-    return true;
+
+return true;
 }
 
 void TVPAppDelegate::initGLContextAttrs() {

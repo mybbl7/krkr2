@@ -106,7 +106,7 @@ bool TVPAppDelegate::applicationDidFinishLaunching() {
 
             TVPGlobalPreferenceForm::Initialize();
 
-             const char *envPath = std::getenv("krkrdatapath");
+            const char *envPath = std::getenv("krkrdatapath");
             if(envPath && *envPath) {
                 std::string path(envPath);
                 auto fu = cocos2d::FileUtils::getInstance();
@@ -117,7 +117,7 @@ bool TVPAppDelegate::applicationDidFinishLaunching() {
                 auto pos = path.find_last_of("/\\");
                 std::string baseDir =
                     (pos != std::string::npos) ? path.substr(0, pos) : ".";
-                std::string saveDataDir = baseDir  "/savedata";
+                std::string saveDataDir = baseDir "/savedata";
 
 
                 // create savedata directory if needed

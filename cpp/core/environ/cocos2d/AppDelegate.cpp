@@ -119,12 +119,12 @@ bool TVPAppDelegate::applicationDidFinishLaunching() {
             std::string saveDataDir = baseDir + "/savedata";
 
             // create savedata directory if needed
-
             if(!fu->isDirectoryExist(saveDataDir)) {
-                if(!fu->createDirectory(saveDataDir)) {
-                    spdlog::error("Failed to create savedata directory at {}",
-                                  saveDataDir);
-                }
+              if(!fu->createDirectory(saveDataDir)) {
+                spdlog::error(
+                    "Failed to create savedata directory at {}",
+                    saveDataDir);
+              }
             }
 
 
@@ -138,7 +138,7 @@ bool TVPAppDelegate::applicationDidFinishLaunching() {
 
 
 
-
+        }
     
         if (!TVPCheckStartupArg()) {
         spdlog::debug("No startup args, showing file selector");

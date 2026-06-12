@@ -139,7 +139,6 @@ bool TVPAppDelegate::applicationDidFinishLaunching() {
 
 
 
-        }
     
         if (!TVPCheckStartupArg()) {
         spdlog::debug("No startup args, showing file selector");

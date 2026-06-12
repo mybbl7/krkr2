@@ -130,7 +130,6 @@ bool TVPAppDelegate::applicationDidFinishLaunching() {
                 }
 
 
-
                 // if path is valid, launch directly
                 if(fu->isFileExist(path) || fu->isDirectoryExist(path)) {
                     spdlog::debug("Launching from {}", path);
